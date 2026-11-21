@@ -6,25 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Create valid AndroidManifest.xml via Python
+      - name: Decode clean manifest
         run: |
-          python3 -c '
-          import os
-          os.makedirs("app/src/main", exist_ok=True)
-          a = "andr" + "oid"
-          xml = f"""<?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:{a}="http://android.com">
-              <application {a}:label="YukiCalc" {a}:theme="@{a}:style/Theme.Material.NoActionBar">
-                  <activity {a}:name=".MainActivity" {a}:exported="true">
-                      <intent-filter>
-                          <action {a}:name="android.intent.action.MAIN" />
-                          <category {a}:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>"""
-          open("app/src/main/AndroidManifest.xml", "w").write(xml)
-          '
+          mkdir -p app/src/main
+          python3 -c "import base64; open('app/src/main/AndroidManifest.xml','wb').write(base64.b64decode('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPG1hbmlmZXN0IHhtbG5zOmFuZHJvaWQ9Imh0dHA6Ly9zY2hlbWFzLmFuZHJvaWQuY29tL2Fway9yZXMvYW5kcm9pZCI+CiAgICA8YXBwbGljYXRpb24gYW5kcm9pZDpsYWJlbD0iWXVraUNhbGMiIGFuZHJvaWQ6dGhlbWU9IkBhbmRyb2lkOnN0eWxlL1RoZW1lLk1hdGVyaWFsLk5vQWN0aW9uQmFyIj4KICAgICAgICA8YWN0aXZpdHkgYW5kcm9pZDpuYW1lPSIuTWFpbkFjdGl2aXR5IiBhbmRyb2lkOmV4cG9ydGVkPSJ0cnVlIj4KICAgICAgICAgICAgPGludGVudC1maWx0ZXI+CiAgICAgICAgICAgICAgICA8YWN0aW9uIGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuYWN0aW9uLk1BSU4iIC8+CiAgICAgICAgICAgICAgICA8Y2F0ZWdvcnkgYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5jYXRlZ29yeS5MQVVOQ0hFUiIgLz4KICAgICAgICAgICAgPC9pbnRlbnQtZmlsdGVyPgogICAgICAgIDwvYWN0aXZpdHk+CiAgICA8L2FwcGxpY2F0aW9uPgo8L21hbmlmZXN0Pgo='))"
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
