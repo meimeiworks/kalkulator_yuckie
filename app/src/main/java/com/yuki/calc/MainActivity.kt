@@ -22,7 +22,6 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Включаем тёмные системные панели под цвет интерфейса
         window.statusBarColor = Color.parseColor("#121218")
         window.navigationBarColor = Color.parseColor("#121218")
 
@@ -33,7 +32,6 @@ class MainActivity : Activity() {
 
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            // Отступ сверху 96px, чтобы не перекрывалось камерой/строкой состояния на Android 14+
             setPadding(42, 96, 42, 48)
         }
 
@@ -62,7 +60,6 @@ class MainActivity : Activity() {
         }
         root.addView(inputField)
 
-        // Сетка с быстрыми кнопками всех 11 авторских операторов
         val samples = listOf(
             "4;8", "Г231р999", "6++8", "3#55",
             "5@5", "2R25", "5C50", "3^^5",
@@ -147,7 +144,7 @@ class MainActivity : Activity() {
 
         // 11. Оператор POL (5POL -> [5]+[5]=10 и [5]*[5]=25 ->)
         Regex("""^(\d+)POL$""").matchEntire(s)?.let { m ->
-            val a = m.groupValues[1].toBigInteger()
+            val a = m.groupValues.get(1).toBigInteger()
             val top = a + a
             val bot = a * a
             return "Оператор 'POL' (Двухэтажный блок)\n" +
@@ -158,8 +155,8 @@ class MainActivity : Activity() {
 
         // 2. Оператор Г...р... (Г231р999 -> 231 * 9 * 9 * 9)
         Regex("""^[Гг](\d+)[Рр](\d+)$""").matchEntire(s)?.let { m ->
-            val base = m.groupValues[1].toBigInteger()
-            val digits = m.groupValues[2]
+            val base = m.groupValues.get(1).toBigInteger()
+            val digits = m.groupValues.get(2)
             var res = base
             for (ch in digits) {
                 res *= ch.digitToInt().toBigInteger()
@@ -175,9 +172,9 @@ class MainActivity : Activity() {
                       "4;8 | Г231р999 | 6++8 | 3#55 | 5@5\n" +
                       "2R25 | 5C50 | 3^^5 | 5S5 | 5RU5 | 5POL"
 
-        val aStr = m.groupValues[1]
-        val op = m.groupValues[2]
-        val bStr = m.groupValues[3]
+        val aStr = m.groupValues.get(1)
+        val op = m.groupValues.get(2)
+        val bStr = m.groupValues.get(3)
         val a = aStr.toBigInteger()
         val b = bStr.toBigInteger()
 
